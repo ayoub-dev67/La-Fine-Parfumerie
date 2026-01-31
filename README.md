@@ -374,3 +374,6 @@ Expiration : date future quelconque, CVC : 3 chiffres
 ## Licence
 
 Propriétaire - La Fine Parfumerie
+
+ # #   G o o g l e   O A u t h   c o n f i g u r e d  
+ 
