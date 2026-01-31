@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hors ligne | La Fine Parfumerie</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      background: #0a0a0a;
+      color: #f5f5f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      text-align: center;
+      max-width: 400px;
+    }
+    .icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 2rem;
+      border: 2px solid rgba(197, 160, 89, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon svg {
+      width: 40px;
+      height: 40px;
+      color: #c5a059;
+    }
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2rem;
+      color: #c5a059;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    p {
+      color: rgba(245, 245, 240, 0.6);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 32px;
+      background: #c5a059;
+      color: #0a0a0a;
+      text-decoration: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.875rem;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #d4b77a;
+    }
+    .status {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(197, 160, 89, 0.1);
+      border: 1px solid rgba(197, 160, 89, 0.2);
+      font-size: 0.875rem;
+      color: rgba(245, 245, 240, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"/>
+      </svg>
+    </div>
+    <h1>Vous êtes hors ligne</h1>
+    <p>
+      Il semble que vous n'ayez pas de connexion internet.
+      Vérifiez votre connexion et réessayez.
+    </p>
+    <button class="btn" onclick="window.location.reload()">
+      Réessayer
+    </button>
+    <div class="status">
+      La Fine Parfumerie - Parfums de luxe à Strasbourg
+    </div>
+  </div>
+  <script>
+    // Vérifier automatiquement la connexion
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

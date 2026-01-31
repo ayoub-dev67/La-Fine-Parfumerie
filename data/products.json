@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Chanel N°5",
+    "description": "Un parfum iconique et intemporel aux notes florales et aldéhydées. Un classique de la haute parfumerie depuis 1921.",
+    "price": 125.00,
+    "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400",
+    "category": "Femme",
+    "stock": 15
+  },
+  {
+    "id": 2,
+    "name": "Dior Sauvage",
+    "description": "Une eau de toilette fraîche et puissante aux notes boisées et épicées. L'essence de la masculinité moderne.",
+    "price": 98.00,
+    "image": "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400",
+    "category": "Homme",
+    "stock": 20
+  },
+  {
+    "id": 3,
+    "name": "Yves Saint Laurent Black Opium",
+    "description": "Un parfum addictif et sensuel avec des notes de café, vanille et fleurs blanches. Intense et moderne.",
+    "price": 110.00,
+    "image": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400",
+    "category": "Femme",
+    "stock": 12
+  },
+  {
+    "id": 4,
+    "name": "Tom Ford Oud Wood",
+    "description": "Un parfum oriental boisé rare avec de l'oud précieux, du bois de rose et du cardamome. Sophistiqué et luxueux.",
+    "price": 245.00,
+    "image": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400",
+    "category": "Mixte",
+    "stock": 8
+  },
+  {
+    "id": 5,
+    "name": "Lancôme La Vie Est Belle",
+    "description": "Un parfum gourmand floral avec iris, patchouli et praline. Une célébration de la vie et du bonheur.",
+    "price": 115.00,
+    "image": "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400",
+    "category": "Femme",
+    "stock": 18
+  },
+  {
+    "id": 6,
+    "name": "Paco Rabanne 1 Million",
+    "description": "Un parfum oriental épicé audacieux avec cannelle, cuir et ambre. Pour l'homme qui veut se démarquer.",
+    "price": 89.00,
+    "image": "https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=400",
+    "category": "Homme",
+    "stock": 25
+  },
+  {
+    "id": 7,
+    "name": "Jo Malone English Pear & Freesia",
+    "description": "Une fragrance fraîche et fruitée avec poire juteuse, freesia et patchouli. Élégante et raffinée.",
+    "price": 135.00,
+    "image": "https://images.unsplash.com/photo-1528821128474-27f963b062bf?w=400",
+    "category": "Mixte",
+    "stock": 10
+  },
+  {
+    "id": 8,
+    "name": "Givenchy L'Interdit",
+    "description": "Un parfum floral blanc audacieux avec fleur d'oranger, jasmin et tubéreuse. Fascinant et irrésistible.",
+    "price": 120.00,
+    "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400",
+    "category": "Femme",
+    "stock": 14
+  }
+]

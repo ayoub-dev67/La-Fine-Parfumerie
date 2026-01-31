@@ -1,0 +1,158 @@
+{
+  "common": {
+    "appName": "La Fine Parfumerie",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "all": "All",
+    "none": "None"
+  },
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "about": "About",
+    "contact": "Contact",
+    "cart": "Cart",
+    "wishlist": "Wishlist",
+    "account": "My Account",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register"
+  },
+  "product": {
+    "addToCart": "Add to cart",
+    "addToWishlist": "Add to wishlist",
+    "removeFromWishlist": "Remove from wishlist",
+    "quickView": "Quick view",
+    "compare": "Compare",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "remaining": "{count} remaining",
+    "price": "Price",
+    "volume": "Volume",
+    "brand": "Brand",
+    "category": "Category",
+    "notes": {
+      "top": "Top notes",
+      "heart": "Heart notes",
+      "base": "Base notes"
+    },
+    "badges": {
+      "new": "New",
+      "bestSeller": "Best seller",
+      "featured": "Featured"
+    }
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty",
+    "items": "{count, plural, =0 {No items} =1 {1 item} other {# items}}",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "freeShipping": "Free",
+    "total": "Total",
+    "checkout": "Checkout",
+    "continueShopping": "Continue shopping",
+    "quantity": "Quantity",
+    "remove": "Remove"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "shipping": {
+      "title": "Shipping",
+      "address": "Address",
+      "city": "City",
+      "postalCode": "Postal code",
+      "country": "Country"
+    },
+    "payment": {
+      "title": "Payment",
+      "card": "Credit card",
+      "processing": "Processing..."
+    },
+    "success": {
+      "title": "Order confirmed!",
+      "message": "Thank you for your order.",
+      "orderNumber": "Order number",
+      "emailSent": "A confirmation email has been sent."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "withGoogle": "Continue with Google"
+    },
+    "register": {
+      "title": "Create account",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "submit": "Sign up",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "account": {
+    "title": "My account",
+    "orders": "My orders",
+    "wishlist": "My wishlist",
+    "loyalty": "Loyalty",
+    "settings": "Settings",
+    "profile": "Profile"
+  },
+  "orders": {
+    "title": "My orders",
+    "empty": "No orders",
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "track": "Track",
+    "details": "Details"
+  },
+  "footer": {
+    "about": "About",
+    "contact": "Contact",
+    "legal": "Legal notice",
+    "privacy": "Privacy policy",
+    "terms": "Terms & conditions",
+    "returns": "Returns",
+    "newsletter": {
+      "title": "Newsletter",
+      "placeholder": "Your email",
+      "subscribe": "Subscribe"
+    },
+    "social": "Follow us",
+    "copyright": "© {year} La Fine Parfumerie. All rights reserved."
+  },
+  "errors": {
+    "required": "This field is required",
+    "email": "Invalid email",
+    "minLength": "Minimum {min} characters",
+    "maxLength": "Maximum {max} characters",
+    "passwordMatch": "Passwords do not match",
+    "generic": "An error occurred. Please try again."
+  }
+}

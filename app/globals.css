@@ -1,0 +1,358 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   LA FINE PARFUMERIE - DESIGN SYSTEM
+   Palette: Noir (#0a0a0a) + Or (#c5a059) + Crème (#f5f5f0)
+   ============================================ */
+
+:root {
+  /* Couleurs principales */
+  --background: #0a0a0a;
+  --foreground: #f5f5f0;
+  --noir: #0a0a0a;
+  --or: #c5a059;
+  --or-light: #d4b77a;
+  --or-dark: #a8863d;
+  --creme: #f5f5f0;
+  --creme-light: #fafaf8;
+  --creme-dark: #e8e8e0;
+
+  /* Typographie */
+  --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-montserrat), "Montserrat", system-ui, sans-serif;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadows */
+  --shadow-luxury: 0 4px 20px rgba(197, 160, 89, 0.15);
+  --shadow-luxury-lg: 0 8px 40px rgba(197, 160, 89, 0.2);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Selection style */
+::selection {
+  background-color: var(--or);
+  color: var(--noir);
+}
+
+::-moz-selection {
+  background-color: var(--or);
+  color: var(--noir);
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--noir);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--or-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--or);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--or-dark) var(--noir);
+}
+
+/* ============================================
+   TYPOGRAPHY LAYER
+   ============================================ */
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  a {
+    @apply transition-colors duration-300;
+  }
+}
+
+/* ============================================
+   COMPONENT LAYER - Luxury UI Components
+   ============================================ */
+
+@layer components {
+  /* Bouton principal Or */
+  .btn-luxury {
+    @apply inline-flex items-center justify-center px-8 py-3
+           bg-or text-noir font-sans font-medium tracking-wider uppercase
+           transition-all duration-300 ease-out
+           hover:bg-or-light hover:shadow-luxury
+           focus:outline-none focus:ring-2 focus:ring-or focus:ring-offset-2 focus:ring-offset-noir;
+  }
+
+  /* Bouton secondaire outline */
+  .btn-luxury-outline {
+    @apply inline-flex items-center justify-center px-8 py-3
+           border border-or text-or font-sans font-medium tracking-wider uppercase
+           transition-all duration-300 ease-out
+           hover:bg-or hover:text-noir
+           focus:outline-none focus:ring-2 focus:ring-or focus:ring-offset-2 focus:ring-offset-noir;
+  }
+
+  /* Card produit */
+  .card-luxury {
+    @apply relative bg-noir-50 overflow-hidden
+           transition-all duration-500 ease-out
+           hover:shadow-luxury-lg;
+  }
+
+  /* Overlay gradient pour images */
+  .overlay-gradient {
+    @apply absolute inset-0 bg-gradient-to-t from-noir via-noir/50 to-transparent;
+  }
+
+  /* Badge doré */
+  .badge-gold {
+    @apply inline-flex items-center px-3 py-1
+           bg-or/10 text-or text-xs font-sans font-medium tracking-wider uppercase
+           border border-or/30;
+  }
+
+  /* Input luxe */
+  .input-luxury {
+    @apply w-full px-4 py-3 bg-noir-100 border border-noir-50
+           text-creme placeholder-creme/40
+           transition-all duration-300
+           focus:outline-none focus:border-or focus:ring-1 focus:ring-or;
+  }
+
+  /* Séparateur doré */
+  .divider-gold {
+    @apply w-16 h-px bg-or mx-auto;
+  }
+
+  /* Container luxe avec bordure dorée subtile */
+  .container-luxury {
+    @apply relative;
+  }
+
+  .container-luxury::before {
+    content: '';
+    @apply absolute inset-0 border border-or/10 pointer-events-none;
+  }
+
+  /* Text gradient doré */
+  .text-gold-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-or-dark via-or to-or-light;
+  }
+
+  /* Ligne décorative */
+  .line-decoration {
+    @apply relative inline-block;
+  }
+
+  .line-decoration::after {
+    content: '';
+    @apply absolute -bottom-2 left-0 w-full h-px bg-or transform scale-x-0 origin-left
+           transition-transform duration-500;
+  }
+
+  .line-decoration:hover::after {
+    @apply scale-x-100;
+  }
+}
+
+/* ============================================
+   UTILITY LAYER
+   ============================================ */
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Animation delays */
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  /* Aspect ratios pour images produits */
+  .aspect-perfume {
+    aspect-ratio: 3/4;
+  }
+
+  .aspect-hero {
+    aspect-ratio: 16/9;
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-noir/60 backdrop-blur-md;
+  }
+
+  .glass-light {
+    @apply bg-creme/10 backdrop-blur-md;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+
+  /* Image zoom on hover */
+  .hover-zoom {
+    @apply transition-transform duration-700 ease-out hover:scale-105;
+  }
+
+  /* Shimmer effect for loading states */
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(197, 160, 89, 0.1),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(197, 160, 89, 0);
+  }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-base: 14px;
+  }
+
+  .btn-luxury,
+  .btn-luxury-outline {
+    @apply px-6 py-2.5 text-sm;
+  }
+}
+
+/* ============================================
+   FOCUS VISIBLE (Accessibility)
+   ============================================ */
+
+:focus-visible {
+  @apply outline-none ring-2 ring-or ring-offset-2 ring-offset-noir;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .btn-luxury,
+  .btn-luxury-outline {
+    border: 1px solid black;
+  }
+}

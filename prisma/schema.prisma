@@ -1,0 +1,602 @@
+// ============================================
+// CONFIGURATION PRISMA
+// ============================================
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// AUTHENTIFICATION NEXTAUTH.JS
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  emailVerified DateTime?
+  image         String?
+  password      String?   // Pour auth email/password (null si OAuth)
+  role          Role      @default(USER)
+
+  // Relations NextAuth
+  accounts      Account[]
+  sessions      Session[]
+
+  // Relations métier
+  orders        Order[]   @relation("UserOrders")
+  reviews       Review[]  @relation("UserReviews")
+  wishlist      Wishlist[] @relation("UserWishlist")
+
+  // Relations emails
+  emailLogs     EmailLog[]       @relation("UserEmails")
+  scheduledEmails ScheduledEmail[] @relation("UserScheduledEmails")
+
+  // Relations fidélité & parrainage
+  loyalty           LoyaltyPoints?
+  pushSubscriptions PushSubscription[]
+  referralsGiven    Referral[] @relation("Referrer")
+  referralReceived  Referral?  @relation("Referee")
+
+  // Wishlist sharing
+  wishlistShareId   String?   @unique
+  wishlistPublic    Boolean   @default(false)
+
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([email])
+  @@index([wishlistShareId])
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([token])
+  @@map("password_reset_tokens")
+}
+
+// ============================================
+// MODÈLE PRODUIT
+// Gestion des parfums avec stock en temps réel
+// ============================================
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String
+  brand       String?     // Marque (Xerjoff, Lattafa, Carolina Herrera...)
+  description String
+  price       Float
+  volume      String?     // Volume (50ml, 100ml...)
+  image       String
+  category    String      // Niche, Signature, Homme, Femme, Coffret
+  subcategory String?     // Sous-catégorie optionnelle
+  stock       Int         @default(0)
+
+  // Notes olfactives
+  notesTop    String?     // Notes de tête (Bergamote, Citron...)
+  notesHeart  String?     // Notes de cœur (Rose, Jasmin...)
+  notesBase   String?     // Notes de fond (Musc, Vanille...)
+
+  // Badges et mise en avant
+  isFeatured  Boolean     @default(false)
+  isNew       Boolean     @default(false)
+  isBestSeller Boolean    @default(false)
+
+  // Timestamps
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  orderItems    OrderItem[]
+  reviews       Review[]    @relation("ProductReviews")
+  wishlists     Wishlist[]  @relation("ProductWishlist")
+  stockHistory  StockHistory[] @relation("ProductStockHistory")
+
+  // Index pour optimiser les requêtes
+  @@index([category])
+  @@index([brand])
+  @@index([stock])
+  @@index([isFeatured])
+  @@map("products")
+}
+
+// ============================================
+// MODÈLE AVIS CLIENT
+// Système de notation et commentaires produits
+// ============================================
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      // Note de 1 à 5
+  title     String?  // Titre optionnel de l'avis
+  comment   String   // Commentaire de l'avis
+
+  // Relation avec le produit
+  productId Int
+  product   Product  @relation("ProductReviews", fields: [productId], references: [id], onDelete: Cascade)
+
+  // Relation avec l'utilisateur
+  userId    String
+  user      User     @relation("UserReviews", fields: [userId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Un utilisateur ne peut laisser qu'un avis par produit
+  @@unique([productId, userId])
+  @@index([productId])
+  @@index([userId])
+  @@index([rating])
+  @@map("reviews")
+}
+
+// ============================================
+// MODÈLE LISTE DE SOUHAITS
+// Favoris des utilisateurs
+// ============================================
+model Wishlist {
+  id        String   @id @default(cuid())
+
+  // Relation avec l'utilisateur
+  userId    String
+  user      User     @relation("UserWishlist", fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relation avec le produit
+  productId Int
+  product   Product  @relation("ProductWishlist", fields: [productId], references: [id], onDelete: Cascade)
+
+  // Timestamp
+  createdAt DateTime @default(now())
+
+  // Un produit ne peut être qu'une fois dans la wishlist d'un utilisateur
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+  @@map("wishlists")
+}
+
+// ============================================
+// MODÈLE CLIENT
+// Permet de lier les commandes à un email
+// ============================================
+model Customer {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  orders    Order[]
+
+  // Index
+  @@index([email])
+  @@map("customers")
+}
+
+// ============================================
+// MODÈLE COMMANDE
+// Gestion des commandes avec statut et traçabilité
+// ============================================
+model Order {
+  id              String      @id @default(cuid())
+  stripeSessionId String      @unique
+  status          OrderStatus @default(PENDING)
+  totalAmount     Float
+
+  // Code promo appliqué
+  promoCode       String?     // Code promo utilisé
+  discountAmount  Float?      // Montant de la réduction appliquée
+
+  // Informations d'expédition
+  trackingNumber  String?
+  carrier         String?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?   // Date de livraison confirmée
+
+  // Dates de traçabilité
+  createdAt       DateTime    @default(now())
+  paidAt          DateTime?
+  cancelledAt     DateTime?
+  updatedAt       DateTime    @updatedAt
+
+  // Relation avec l'utilisateur authentifié (nouvelle)
+  userId          String?
+  user            User?       @relation("UserOrders", fields: [userId], references: [id], onDelete: SetNull)
+
+  // Relation legacy avec le client (pour migration)
+  customerId      String?
+  customer        Customer?   @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  // Relations avec les lignes de commande
+  items           OrderItem[]
+
+  // Relations emails
+  emailLogs       EmailLog[]       @relation("OrderEmails")
+  scheduledEmails ScheduledEmail[] @relation("OrderScheduledEmails")
+
+  // Relation points fidélité
+  pointsHistory   PointsHistory[]
+
+  // Index pour optimiser les requêtes
+  @@index([stripeSessionId])
+  @@index([status])
+  @@index([userId])
+  @@index([customerId])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+// ============================================
+// MODÈLE LIGNE DE COMMANDE
+// Snapshot du produit au moment de l'achat
+// ============================================
+model OrderItem {
+  id        String   @id @default(cuid())
+  quantity  Int
+  price     Float // Prix au moment de l'achat (historisation)
+
+  // Relation avec la commande (cascade delete)
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // Relation avec le produit (restrict delete pour préserver l'historique)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+
+  // Index
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+// ============================================
+// MODÈLE CODE PROMO
+// Gestion des codes promotionnels
+// ============================================
+model PromoCode {
+  id              String    @id @default(cuid())
+  code            String    @unique // Code promo unique (ex: LUXE20)
+
+  // Type de réduction (un seul actif)
+  discountPercent Float?    // Réduction en % (ex: 20 = 20%)
+  discountAmount  Float?    // Réduction fixe en € (ex: 15 = -15€)
+
+  // Conditions d'utilisation
+  minPurchase     Float?    // Montant minimum d'achat requis
+  maxUses         Int?      // Nombre max d'utilisations (null = illimité)
+  usedCount       Int       @default(0) // Compteur d'utilisations
+
+  // Période de validité
+  validFrom       DateTime  @default(now()) // Date de début
+  validUntil      DateTime? // Date de fin (null = pas d'expiration)
+
+  // Statut
+  isActive        Boolean   @default(true) // Code actif/désactivé
+
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Index pour optimiser les requêtes
+  @@index([code])
+  @@index([isActive])
+  @@index([validFrom, validUntil])
+  @@map("promo_codes")
+}
+
+// ============================================
+// ENUM STATUT COMMANDE
+// Cycle de vie d'une commande
+// ============================================
+enum OrderStatus {
+  PENDING    // En attente de paiement Stripe
+  PAID       // Paiement confirmé par webhook
+  SHIPPED    // Commande expédiée
+  DELIVERED  // Commande livrée
+  CANCELLED  // Session expirée ou annulée
+  FAILED     // Échec de paiement
+  REFUNDED   // Remboursement effectué (futur)
+}
+
+// ============================================
+// MODÈLE LOG D'EMAILS
+// Historique de tous les emails envoyés
+// ============================================
+model EmailLog {
+  id          String       @id @default(cuid())
+
+  // Informations de l'email
+  to          String       // Destinataire
+  subject     String       // Sujet de l'email
+  type        EmailType    // Type d'email
+  status      EmailStatus  @default(SENT)
+
+  // ID Resend pour le tracking
+  resendId    String?      // ID retourné par Resend
+
+  // Métadonnées
+  metadata    Json?        // Données additionnelles (orderId, etc.)
+
+  // Erreur si échec
+  error       String?
+
+  // Relations optionnelles
+  userId      String?
+  user        User?        @relation("UserEmails", fields: [userId], references: [id], onDelete: SetNull)
+
+  orderId     String?
+  order       Order?       @relation("OrderEmails", fields: [orderId], references: [id], onDelete: SetNull)
+
+  // Timestamps
+  createdAt   DateTime     @default(now())
+
+  @@index([to])
+  @@index([type])
+  @@index([status])
+  @@index([userId])
+  @@index([orderId])
+  @@index([createdAt])
+  @@map("email_logs")
+}
+
+// ============================================
+// MODÈLE EMAIL PROGRAMMÉ
+// Emails à envoyer automatiquement
+// ============================================
+model ScheduledEmail {
+  id          String            @id @default(cuid())
+
+  // Informations de l'email
+  to          String            // Destinataire
+  type        EmailType         // Type d'email
+  status      ScheduledStatus   @default(PENDING)
+
+  // Date d'envoi programmée
+  scheduledAt DateTime
+  sentAt      DateTime?
+
+  // Métadonnées (orderId, productId, etc.)
+  metadata    Json?
+
+  // Relations
+  userId      String?
+  user        User?             @relation("UserScheduledEmails", fields: [userId], references: [id], onDelete: SetNull)
+
+  orderId     String?
+  order       Order?            @relation("OrderScheduledEmails", fields: [orderId], references: [id], onDelete: SetNull)
+
+  // Erreur si échec
+  error       String?
+
+  // Timestamps
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([scheduledAt])
+  @@index([status])
+  @@index([type])
+  @@map("scheduled_emails")
+}
+
+enum EmailType {
+  WELCOME           // Email de bienvenue
+  ORDER_CONFIRMATION // Confirmation de commande
+  SHIPPING          // Notification d'expédition
+  DELIVERY          // Confirmation de livraison
+  REVIEW_REQUEST    // Demande d'avis
+  PASSWORD_RESET    // Réinitialisation mot de passe
+  PROMO             // Email promotionnel
+}
+
+enum EmailStatus {
+  SENT      // Envoyé avec succès
+  FAILED    // Échec d'envoi
+  BOUNCED   // Rejeté par le serveur
+  OPENED    // Ouvert (si tracking)
+  CLICKED   // Lien cliqué
+}
+
+enum ScheduledStatus {
+  PENDING   // En attente d'envoi
+  SENT      // Envoyé
+  CANCELLED // Annulé
+  FAILED    // Échec
+}
+
+// ============================================
+// PROGRAMME DE FIDÉLITÉ
+// Points, tiers et historique
+// ============================================
+model LoyaltyPoints {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  points    Int      @default(0)
+  tier      LoyaltyTier @default(BRONZE)
+
+  history   PointsHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("loyalty_points")
+}
+
+model PointsHistory {
+  id          String        @id @default(cuid())
+  loyaltyId   String
+  loyalty     LoyaltyPoints @relation(fields: [loyaltyId], references: [id], onDelete: Cascade)
+  amount      Int           // Positif = gain, négatif = dépense
+  reason      PointsReason
+  orderId     String?
+  order       Order?        @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+
+  @@index([loyaltyId])
+  @@index([orderId])
+  @@map("points_history")
+}
+
+enum LoyaltyTier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum PointsReason {
+  PURCHASE    // Achat
+  REDEEM      // Utilisation points
+  BONUS       // Bonus spécial
+  REFERRAL    // Parrainage
+  REVIEW      // Avis produit
+  BIRTHDAY    // Anniversaire
+}
+
+// ============================================
+// NOTIFICATIONS PUSH
+// Subscriptions pour PWA
+// ============================================
+model PushSubscription {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription String   @db.Text // JSON de la subscription
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@map("push_subscriptions")
+}
+
+// ============================================
+// SYSTÈME DE PARRAINAGE
+// Codes et récompenses
+// ============================================
+model Referral {
+  id          String    @id @default(cuid())
+  referrerId  String
+  referrer    User      @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  refereeId   String?   @unique
+  referee     User?     @relation("Referee", fields: [refereeId], references: [id], onDelete: SetNull)
+  code        String    @unique
+  status      ReferralStatus @default(PENDING)
+  reward      Float     @default(10) // Récompense en €
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([referrerId])
+  @@index([code])
+  @@map("referrals")
+}
+
+enum ReferralStatus {
+  PENDING     // En attente de première commande
+  COMPLETED   // Parrainage validé
+  EXPIRED     // Expiré
+}
+
+// ============================================
+// GESTION DE STOCK AVANCÉE
+// Historique des mouvements de stock
+// ============================================
+model StockHistory {
+  id          String        @id @default(cuid())
+  productId   Int
+  product     Product       @relation("ProductStockHistory", fields: [productId], references: [id], onDelete: Cascade)
+
+  // Mouvement
+  quantity    Int           // Positif = entrée, négatif = sortie
+  type        StockMovement
+  reason      String?       // Description optionnelle
+
+  // Stock avant/après
+  stockBefore Int
+  stockAfter  Int
+
+  // Référence optionnelle
+  orderId     String?
+
+  // Utilisateur qui a fait le mouvement
+  userId      String?
+
+  createdAt   DateTime      @default(now())
+
+  @@index([productId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("stock_history")
+}
+
+enum StockMovement {
+  SALE        // Vente
+  RETURN      // Retour client
+  RESTOCK     // Réapprovisionnement
+  ADJUSTMENT  // Ajustement manuel
+  DAMAGE      // Produit endommagé
+  TRANSFER    // Transfert
+}

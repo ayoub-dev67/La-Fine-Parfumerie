@@ -1,0 +1,158 @@
+{
+  "common": {
+    "appName": "La Fine Parfumerie",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "all": "Tous",
+    "none": "Aucun"
+  },
+  "nav": {
+    "home": "Accueil",
+    "shop": "Boutique",
+    "about": "À propos",
+    "contact": "Contact",
+    "cart": "Panier",
+    "wishlist": "Favoris",
+    "account": "Mon compte",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "register": "Inscription"
+  },
+  "product": {
+    "addToCart": "Ajouter au panier",
+    "addToWishlist": "Ajouter aux favoris",
+    "removeFromWishlist": "Retirer des favoris",
+    "quickView": "Aperçu rapide",
+    "compare": "Comparer",
+    "inStock": "En stock",
+    "outOfStock": "Rupture de stock",
+    "remaining": "{count} restant(s)",
+    "price": "Prix",
+    "volume": "Volume",
+    "brand": "Marque",
+    "category": "Catégorie",
+    "notes": {
+      "top": "Notes de tête",
+      "heart": "Notes de cœur",
+      "base": "Notes de fond"
+    },
+    "badges": {
+      "new": "Nouveau",
+      "bestSeller": "Best-seller",
+      "featured": "Coup de cœur"
+    }
+  },
+  "cart": {
+    "title": "Votre panier",
+    "empty": "Votre panier est vide",
+    "items": "{count, plural, =0 {Aucun article} =1 {1 article} other {# articles}}",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "freeShipping": "Gratuite",
+    "total": "Total",
+    "checkout": "Passer commande",
+    "continueShopping": "Continuer les achats",
+    "quantity": "Quantité",
+    "remove": "Retirer"
+  },
+  "checkout": {
+    "title": "Paiement",
+    "shipping": {
+      "title": "Livraison",
+      "address": "Adresse",
+      "city": "Ville",
+      "postalCode": "Code postal",
+      "country": "Pays"
+    },
+    "payment": {
+      "title": "Paiement",
+      "card": "Carte bancaire",
+      "processing": "Traitement en cours..."
+    },
+    "success": {
+      "title": "Commande confirmée !",
+      "message": "Merci pour votre commande.",
+      "orderNumber": "Numéro de commande",
+      "emailSent": "Un email de confirmation vous a été envoyé."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "email": "Email",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "signUp": "S'inscrire",
+      "withGoogle": "Continuer avec Google"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "name": "Nom",
+      "email": "Email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "submit": "S'inscrire",
+      "hasAccount": "Déjà un compte ?",
+      "signIn": "Se connecter"
+    }
+  },
+  "account": {
+    "title": "Mon compte",
+    "orders": "Mes commandes",
+    "wishlist": "Mes favoris",
+    "loyalty": "Fidélité",
+    "settings": "Paramètres",
+    "profile": "Profil"
+  },
+  "orders": {
+    "title": "Mes commandes",
+    "empty": "Aucune commande",
+    "status": {
+      "pending": "En attente",
+      "paid": "Payée",
+      "shipped": "Expédiée",
+      "delivered": "Livrée",
+      "cancelled": "Annulée"
+    },
+    "track": "Suivre",
+    "details": "Détails"
+  },
+  "footer": {
+    "about": "À propos",
+    "contact": "Contact",
+    "legal": "Mentions légales",
+    "privacy": "Politique de confidentialité",
+    "terms": "CGV",
+    "returns": "Retours",
+    "newsletter": {
+      "title": "Newsletter",
+      "placeholder": "Votre email",
+      "subscribe": "S'abonner"
+    },
+    "social": "Suivez-nous",
+    "copyright": "© {year} La Fine Parfumerie. Tous droits réservés."
+  },
+  "errors": {
+    "required": "Ce champ est requis",
+    "email": "Email invalide",
+    "minLength": "Minimum {min} caractères",
+    "maxLength": "Maximum {max} caractères",
+    "passwordMatch": "Les mots de passe ne correspondent pas",
+    "generic": "Une erreur est survenue. Veuillez réessayer."
+  }
+}
